@@ -475,10 +475,29 @@
         await music.play();
         overlay.classList.add('hide');
       }catch(e){
-        alert('Tu navegador bloqueó la reproducción. Toca de nuevo o entra sin música.');
+        alAert('Tu navegador bloqueó la reproducción. Toca de nuevo o entra sin música.');
       }
     });
     skipBtn.addEventListener('click', () => overlay.classList.add('hide'));
+    // ✅ Botón "Activar música" (forzar que entre sí o sí)
+const playEl =
+  document.querySelector('#playBtn, #playMusic, #btnMusic, .play-btn, button[data-action="play"]') ||
+  [...document.querySelectorAll('button')].find(b => b.textContent.toLowerCase().includes('activar'));
+
+const overlayEl = document.getElementById('overlay') || document.querySelector('.overlay');
+const musicEl = document.querySelector('#bgMusic, #music, audio') || window.bgMusic;
+
+if (playEl) {
+  playEl.addEventListener('click', async () => {
+    try {
+      if (musicEl && musicEl.play) await musicEl.play();
+    } catch (e) {
+      console.log('Audio bloqueado o error:', e);
+    }
+    // entra sí o sí
+    overlayEl.classList.add('hide');
+  });
+}
 
     // ===== Countdown (cambia la fecha) =====
     // Formato: YYYY-MM-DDTHH:MM:SS (hora local aproximada)
