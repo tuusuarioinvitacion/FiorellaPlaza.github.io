@@ -1,1 +1,78 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portada</title>
 
+  <style>
+    :root{
+      /* ===== AJUSTES EXACTOS (igual a la referencia) ===== */
+      --seal-center-y: 58%;              /* Altura del centro del sello (sube/baja aquí) */
+      --seal-size: min(460px, 86vw);     /* Tamaño del sello (más grande/pequeño aquí) */
+      --bg-pos-x: 50%;                   /* Centrado horizontal del sobre */
+      --bg-pos-y: 50%;                   /* Centrado vertical del sobre */
+
+      /* Brillo elegante (suave) */
+      --glow-1: 0 18px 48px rgba(0,0,0,.22);
+      --glow-2: 0 0 18px rgba(255,255,255,.25);
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; margin:0; }
+    body{ overflow:hidden; background:#eee; }
+
+    /* Fondo a pantalla completa */
+    .cover{
+      position:relative;
+      width:100vw;
+      height:100vh;
+      background: url("sobre.jpg") var(--bg-pos-x) var(--bg-pos-y) / cover no-repeat;
+    }
+
+    /* Botón sello */
+    .seal{
+      position:absolute;
+      left:50%;
+      top: var(--seal-center-y);
+      width: var(--seal-size);
+      aspect-ratio: 1 / 1;
+      transform: translate(-50%, -50%);
+      border:0;
+      padding:0;
+      background: url("sello.png") center/contain no-repeat;
+      border-radius: 999px;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+
+      /* Sombra realista + brillo suave (SIN círculos raros) */
+      box-shadow: var(--glow-1), var(--glow-2);
+
+      /* Animación mínima elegante (solo “respira” un poquito) */
+      animation: breathe 2.8s ease-in-out infinite;
+    }
+
+    @keyframes breathe{
+      0%,100%{ transform: translate(-50%,-50%) scale(1); filter: brightness(1); }
+      50%    { transform: translate(-50%,-50%) scale(1.012); filter: brightness(1.05); }
+    }
+
+    /* Evitar selección */
+    .seal:focus{ outline:none; }
+  </style>
+</head>
+
+<body>
+  <div class="cover">
+    <button class="seal" aria-label="Abrir invitación" onclick="openInvitation()"></button>
+  </div>
+
+  <script>
+    function openInvitation(){
+      // Cambia esto por tu página real:
+      // window.location.href = "invitacion.html";
+      window.location.href = "invitacion.html";
+    }
+  </script>
+</body>
+</html>
