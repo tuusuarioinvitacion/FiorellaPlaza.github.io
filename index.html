@@ -465,20 +465,22 @@
 
   <script>
     // ===== Música (necesita interacción del usuario) =====
-    const overlay = document.getElementById('overlay');
-    const startBtn = document.getElementById('startBtn');
-    const skipBtn = document.getElementById('skipBtn');
-    const music = document.getElementById('music');
+    const overlayEl = document.getElementById('overlay');
+const startBtn = document.getElementById('startBtn');
+const skipBtn = document.getElementById('skipBtn');
+const music = document.getElementById('music');
 const overlayEl = document.getElementById('overlay') || document.querySelector('.overlay');
 const musicEl = document.querySelector('#bgMusic, #music, audio') || window.bgMusic;
     startBtn.addEventListener('click', async () => {
-      try{
-        await music.play();
-        overlayEl.classList.add('hide')
-      }catch(e){
-        alAert('Tu navegador bloqueó la reproducción. Toca de nuevo o entra sin música.');
-      }
-    });
+  try {
+    if (music && music.play) {
+      await music.play();
+    }
+  } catch (e) {
+    console.log('Audio bloqueado, entrando sin música');
+  }
+  overlayEl.classList.add('hide'); // ENTRA SIEMPRE
+});
     if (skipBtn) {
   skipBtn.addEventListener('click', () => overlayEl && overlayEl.classList.add('hide'));
 }
@@ -486,8 +488,6 @@ const musicEl = document.querySelector('#bgMusic, #music, audio') || window.bgMu
 const playEl =
   document.querySelector('#playBtn, #playMusic, #btnMusic, .play-btn, button[data-action="play"]') ||
   [...document.querySelectorAll('button')].find(b => b.textContent.toLowerCase().includes('activar'));
-
-
 
 if (playEl) {
   playEl.addEventListener('click', async () => {
@@ -500,7 +500,6 @@ if (playEl) {
     overlayEl.classList.add('hide');
   });
 }
-
     // ===== Countdown (cambia la fecha) =====
     // Formato: YYYY-MM-DDTHH:MM:SS (hora local aproximada)
     const target = new Date("2026-08-26T16:00:00");
