@@ -469,23 +469,25 @@
     const startBtn = document.getElementById('startBtn');
     const skipBtn = document.getElementById('skipBtn');
     const music = document.getElementById('music');
-
+const overlayEl = document.getElementById('overlay') || document.querySelector('.overlay');
+const musicEl = document.querySelector('#bgMusic, #music, audio') || window.bgMusic;
     startBtn.addEventListener('click', async () => {
       try{
         await music.play();
-        overlay.classList.add('hide');
+        overlayEl.classList.add('hide')
       }catch(e){
         alAert('Tu navegador bloqueó la reproducción. Toca de nuevo o entra sin música.');
       }
     });
-    skipBtn.addEventListener('click', () => overlay.classList.add('hide'));
+    if (skipBtn) {
+  skipBtn.addEventListener('click', () => overlayEl && overlayEl.classList.add('hide'));
+}
     // ✅ Botón "Activar música" (forzar que entre sí o sí)
 const playEl =
   document.querySelector('#playBtn, #playMusic, #btnMusic, .play-btn, button[data-action="play"]') ||
   [...document.querySelectorAll('button')].find(b => b.textContent.toLowerCase().includes('activar'));
 
-const overlayEl = document.getElementById('overlay') || document.querySelector('.overlay');
-const musicEl = document.querySelector('#bgMusic, #music, audio') || window.bgMusic;
+
 
 if (playEl) {
   playEl.addEventListener('click', async () => {
