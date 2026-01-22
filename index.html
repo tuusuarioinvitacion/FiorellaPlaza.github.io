@@ -1,111 +1,146 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Invitación</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Invitación</title>
 
-<style>
-html,body{
-  margin:0;
-  padding:0;
-  width:100%;
-  height:100%;
-  overflow:hidden;
-  background:#000;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont;
-}
+  <style>
+    :root{
+      --seal-size: clamp(95px, 22vw, 170px); /* sello tamaño medio */
+      --seal-top: 62%;                       /* más arriba (ajústalo 60-64) */
+    }
 
-/* CONTENEDOR PRINCIPAL */
-.cover{
-  position:fixed;
-  inset:0;
-  background:url("envelope.jpg") center/cover no-repeat;
-}
+    html, body{
+      height:100%;
+      margin:0;
+      padding:0;
+      overflow:hidden;
+      background:#000;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
 
-/* SELLO */
-.seal{
-  position:absolute;
-  left:50%;
-  top:62%;
-  transform:translate(-50%,-50%);
-  width:min(30vmin, 210px);
-  aspect-ratio:1/1;
-  background:url("seal.png") center/contain no-repeat;
-  cursor:pointer;
-  z-index:5;
-  filter: drop-shadow(0 0 18px rgba(214,194,166,.55));
-  animation: glow 3s ease-in-out infinite;
-}
+    .cover{
+      position:fixed;
+      inset:0;
+      background:url("envelope.jpg") center/cover no-repeat;
+    }
 
-@keyframes glow{
-  0%{filter:drop-shadow(0 0 10px rgba(214,194,166,.4))}
-  50%{filter:drop-shadow(0 0 26px rgba(214,194,166,.85))}
-  100%{filter:drop-shadow(0 0 10px rgba(214,194,166,.4))}
-}
+    /* ✅ QUITAR cualquier “burbuja” o texto flotante si existiera */
+    .hint, .bubble, .tooltip, .tapHint{ display:none !important; }
 
-/* PÉTALOS */
-.petals{
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:4;
-}
+    /* PÉTALOS */
+    .petals{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:4;
+    }
 
-.petal{
-  position:absolute;
-  top:-25%;
-  width:clamp(70px, 12vw, 160px);   /* GRANDES */
-  aspect-ratio:1/1;
-  background:url("petal1.png") center/contain no-repeat;
-  opacity:.95;
-  animation: fall linear infinite;
-}
+    .petal{
+      position:absolute;
+      top:-30vh;
+      left: var(--x);
+      width: var(--s);
+      aspect-ratio: 1 / 1;
+      background: url("petal1.png") center/contain no-repeat;
+      opacity: var(--o);
+      filter: blur(0.2px);
+      transform: translate3d(0,-30vh,0) rotate(0deg);
+      animation: fall var(--d) linear infinite;
+      animation-delay: var(--delay);
+      will-change: transform;
+    }
 
-@keyframes fall{
-  from{
-    transform:translateY(-30vh) rotate(0deg);
-  }
-  to{
-    transform:translateY(130vh) rotate(360deg);
-  }
-}
-</style>
+    /* Caen de arriba hacia abajo y se van a la derecha */
+    @keyframes fall{
+      from { transform: translate3d(0,-30vh,0) rotate(0deg); }
+      to   { transform: translate3d(18vw,130vh,0) rotate(360deg); }
+    }
+
+    /* SELLO (BOTÓN) */
+    .seal{
+      position:absolute;
+      left:50%;
+      top: var(--seal-top);
+      width: var(--seal-size);
+      height: var(--seal-size);
+      transform: translate(-50%, -50%);
+      background:url("seal.png") center/contain no-repeat;
+      border:none;
+      cursor:pointer;
+      z-index:5;
+    }
+
+    /* brillo elegante alrededor (sin flotar) */
+    .seal::after{
+      content:"";
+      position:absolute;
+      inset:-18px;
+      border-radius:999px;
+      background: radial-gradient(circle, rgba(255,255,255,.28), rgba(255,255,255,0) 60%);
+      filter: blur(2px);
+      opacity:.75;
+      pointer-events:none;
+    }
+
+    /* (Opcional) brillo suave pulsante, MUY elegante */
+    @keyframes glow {
+      0%,100% { opacity:.55; transform: scale(1); }
+      50%     { opacity:.85; transform: scale(1.03); }
+    }
+    .seal::after{ animation: glow 2.6s ease-in-out infinite; }
+
+  </style>
 </head>
 
 <body>
+  <div class="cover">
+    <div class="petals" id="petals"></div>
 
-<div class="cover">
-  <div class="petals" id="petals"></div>
+    <!-- SELLO = BOTÓN -->
+    <div class="seal" onclick="openInvitation()" aria-label="Abrir invitación"></div>
+  </div>
 
-  <!-- SELLO = BOTÓN -->
-  <div class="seal" onclick="openInvitation()"></div>
-</div>
+  <script>
+    /* ✅ PÉTALOS: grandes + abundantes */
+    const PETAL_COUNT = 38; // más abundantes (sube a 45 si quieres aún más)
+    const petalsWrap = document.getElementById("petals");
 
-<script>
-/* ABRIR INVITACIÓN */
-function openInvitation(){
-  document.body.style.transition="opacity .8s ease";
-  document.body.style.opacity="0";
-  setTimeout(()=>{
-    window.location.href="invitation.html"; 
-  },700);
-}
+    function rand(min, max){ return Math.random() * (max - min) + min; }
 
-/* CREAR PÉTALOS */
-const petalsContainer = document.getElementById("petals");
-const COUNT = 45;   // ABUNDANTES
+    for(let i=0; i<PETAL_COUNT; i++){
+      const p = document.createElement("div");
+      p.className = "petal";
 
-for(let i=0;i<COUNT;i++){
-  const p = document.createElement("div");
-  p.className = "petal";
-  p.style.left = Math.random()*100 + "%";
-  p.style.animationDuration = (10 + Math.random()*10) + "s";
-  p.style.animationDelay = (-Math.random()*20) + "s";
-  p.style.opacity = 0.7 + Math.random()*0.3;
-  petalsContainer.appendChild(p);
-}
-</script>
+      // posiciones: toda la pantalla
+      p.style.setProperty("--x", ${rand(-10, 110)}vw);
 
+      // ✅ tamaños súper grandes
+      const size = rand(110, 260); // px
+      p.style.setProperty("--s", ${size}px);
+
+      // duración: cae fluido
+      p.style.setProperty("--d", ${rand(6.5, 12)}s);
+
+      // para que ya “estén cayendo” al abrir (sin esperar)
+      p.style.setProperty("--delay", ${rand(-12, 0)}s);
+
+      // opacidad variada
+      p.style.setProperty("--o", ${rand(0.80, 1).toFixed(2)});
+
+      petalsWrap.appendChild(p);
+    }
+
+    /* ABRIR INVITACIÓN */
+    function openInvitation(){
+      document.body.style.transition = "opacity .8s ease";
+      document.body.style.opacity = "0";
+      setTimeout(() => {
+        // ✅ CAMBIA esta ruta por la tuya real (ej: "invitation.html" o "index2.html")
+        window.location.href = "invitation.html";
+      }, 820);
+    }
+  </script>
 </body>
-</html>
+</html
