@@ -117,7 +117,7 @@
       display:block;
     }
 
-    /* Movimiento principal: entran por la izquierda y se van a la derecha (con leve caída) */
+    /* Movimiento principal: entran por la izquierda superior y se van a la derecha (con leve caída) */
     @keyframes flyRight{
       0%   { transform: translate3d(-25vw, calc(var(--y) * 1vh), 0) rotate(0deg); }
       100% { transform: translate3d(115vw, calc(var(--yEnd) * 1vh), 0) rotate(0deg); }
@@ -654,7 +654,7 @@
       const wrap = document.getElementById('petals');
       if (!wrap) return;
 
-      const petalSources = ['petal1.png','petal2.png','petal3.png'];
+      const petalSources = ['petal1.png'];
 
       const count = 20; // sube a 28 si quieres más
       for (let i=0; i<count; i++){
