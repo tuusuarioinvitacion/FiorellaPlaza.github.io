@@ -230,7 +230,6 @@
       font:inherit;
     }
     textarea{min-height:90px;resize:vertical}
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     .submit{
       padding:12px 14px;
       border-radius:12px;
@@ -276,7 +275,7 @@
 
 <body>
   <!-- Música (sube song.mp3 al repo) -->
-  <audio id="music" loop>
+  <audio id="music" loop preload="auto">
     <source src="song.mp3" type="audio/mpeg">
   </audio>
 
@@ -286,7 +285,7 @@
       <h2>Nuestra boda</h2>
       <p>Para una mejor experiencia, toca el botón y activamos la música.</p>
       <button id="startBtn" class="submit" type="button">Activar música</button>
-      <p class="small" style="margin-top:10px">Si no quieres música, puedes cerrar esta pantalla.</p>
+      <p class="small" style="margin-top:10px">Si no quieres música, puedes entrar igual.</p>
       <button id="skipBtn" class="btn" type="button" style="margin-top:10px">Entrar sin música</button>
     </div>
   </div>
@@ -299,7 +298,7 @@
         <div class="hero-inner">
           <div class="names">NOMBRE & NOMBRE</div>
           <div class="and">Nos casamos</div>
-          <div class="date">Sábado · 26 Agosto 2026 · 4:00 PM</div>
+          <div class="date">11 Julio 2026</div>
           <div class="tagline">Nos haría muy felices que nos acompañes en este día.</div>
         </div>
       </header>
@@ -308,13 +307,14 @@
       <section>
         <div class="title">Cuenta regresiva</div>
         <div class="card center">
-          <div class="big">Falta poquito para el gran día 🤍</div>
+          <div class="big">Falta poquito para el gran día</div>
           <div class="count" id="countdown">
             <div class="box"><div class="num" id="d">--</div><div class="lbl">Días</div></div>
             <div class="box"><div class="num" id="h">--</div><div class="lbl">Horas</div></div>
             <div class="box"><div class="num" id="m">--</div><div class="lbl">Min</div></div>
             <div class="box"><div class="num" id="s">--</div><div class="lbl">Seg</div></div>
           </div>
+          <p class="small" style="margin-top:10px">Fecha objetivo: 11/07/2026</p>
         </div>
       </section>
 
@@ -370,11 +370,11 @@
         <div class="title">Dress Code</div>
         <div class="card center">
           <div class="big">Elegante / Formal</div>
-          <p class="small">Paleta sugerida (puedes cambiarla):</p>
+          <p class="small">Paleta sugerida:</p>
           <div class="palette">
             <div class="dot c1"></div><div class="dot c2"></div><div class="dot c3"></div><div class="dot c4"></div><div class="dot c5"></div>
           </div>
-          <p class="small" style="margin-top:10px">Blanco reservado para la novia 🤍</p>
+          <p class="small" style="margin-top:10px">Blanco reservado para la novia</p>
         </div>
       </section>
 
@@ -397,7 +397,6 @@
             <div class="ph" style="background-image:url('gallery1.jpg');"></div>
             <div class="ph" style="background-image:url('gallery2.jpg');"></div>
           </div>
-          <p class="small" style="margin-top:10px">Si no quieres galería, esta sección se puede borrar.</p>
         </div>
       </section>
 
@@ -420,20 +419,18 @@
         </div>
       </section>
 
-      <!-- RSVP (FORMULARIO) -->
+      <!-- RSVP -->
       <section>
         <div class="title">RSVP</div>
         <div class="card">
-          <p class="small">Confirma tu asistencia aquí. (Puedes conectarlo a un Google Form o Formspree)</p>
+          <p class="small">Confirma tu asistencia aquí:</p>
 
-          <!-- OPCIÓN SIMPLE: se abre WhatsApp (cero complicaciones) -->
           <div class="center" style="margin-top:10px">
-            <a class="btn" target="_blank" href="https://wa.me/51999999999?text=Hola%20confirmo%20mi%20asistencia%20a%20la%20boda%20😊">Confirmar por WhatsApp</a>
+            <a class="btn" target="_blank" href="https://wa.me/51999999999?text=Hola%20confirmo%20mi%20asistencia%20a%20la%20boda">Confirmar por WhatsApp</a>
           </div>
 
           <hr style="border:0;border-top:1px solid var(--line);margin:14px 0">
 
-          <!-- OPCIÓN PRO (gratis): Formspree. Reemplaza TU_ENDPOINT -->
           <form action="https://formspree.io/f/TU_ENDPOINT" method="POST">
             <input name="nombre" placeholder="Tu nombre y apellido" required>
             <select name="asistencia" required>
@@ -445,14 +442,9 @@
             <textarea name="mensaje" placeholder="Comentario (alergias, acompañante, etc.)"></textarea>
             <button class="submit" type="submit">Enviar RSVP</button>
           </form>
-
-          <p class="small" style="margin-top:10px">
-            Para Formspree: creas cuenta gratis y te da el endpoint. Si no quieres eso, deja solo el botón de WhatsApp.
-          </p>
         </div>
       </section>
 
-      <!-- CIERRE -->
       <footer>
         <div class="big" style="font-family:'Great Vibes', cursive; font-size:34px; color:var(--text); margin-bottom:6px;">
           Gracias
@@ -464,55 +456,68 @@
   </div>
 
   <script>
-    // ===== Música (necesita interacción del usuario) =====
+    // ===== Overlay música (sin congelarse) =====
     const overlayEl = document.getElementById('overlay');
-const startBtn = document.getElementById('startBtn');
-const skipBtn = document.getElementById('skipBtn');
-const music = document.getElementById('music');
-const overlayEl = document.getElementById('overlay') || document.querySelector('.overlay');
-const musicEl = document.querySelector('#bgMusic, #music, audio') || window.bgMusic;
-    startBtn.addEventListener('click', async () => {
-  try {
-    if (music && music.play) {
-      await music.play();
-    }
-  } catch (e) {
-    console.log('Audio bloqueado, entrando sin música');
-  }
-  overlayEl.classList.add('hide'); // ENTRA SIEMPRE
-});
-    if (skipBtn) {
-  skipBtn.addEventListener('click', () => overlayEl && overlayEl.classList.add('hide'));
-}
-    // ✅ Botón "Activar música" (forzar que entre sí o sí)
-const playEl =
-  document.querySelector('#playBtn, #playMusic, #btnMusic, .play-btn, button[data-action="play"]') ||
-  [...document.querySelectorAll('button')].find(b => b.textContent.toLowerCase().includes('activar'));
+    const startBtn  = document.getElementById('startBtn');
+    const skipBtn   = document.getElementById('skipBtn');
+    const musicEl   = document.getElementById('music');
 
-if (playEl) {
-  playEl.addEventListener('click', async () => {
-    try {
-      if (musicEl && musicEl.play) await musicEl.play();
-    } catch (e) {
-      console.log('Audio bloqueado o error:', e);
+    function hideOverlay(){
+      if (!overlayEl) return;
+      overlayEl.classList.add('hide');
+      overlayEl.style.display = 'none';
+      overlayEl.style.pointerEvents = 'none';
     }
-    // entra sí o sí
-    overlayEl.classList.add('hide');
-  });
-}
-    // ===== Countdown (cambia la fecha) =====
-    // Formato: YYYY-MM-DDTHH:MM:SS (hora local aproximada)
-    const target = new Date("2026-08-26T16:00:00");
+
+    if (startBtn) {
+      startBtn.addEventListener('click', async () => {
+        try {
+          if (musicEl && musicEl.play) await musicEl.play();
+        } catch (e) {
+          // Aunque falle el audio, entramos igual
+          console.log('Audio bloqueado, entrando igual');
+        }
+        hideOverlay();
+      });
+    }
+
+    if (skipBtn) {
+      skipBtn.addEventListener('click', hideOverlay);
+    }
+
+    // ===== Countdown a 11/07/2026 =====
+    // Formato: YYYY-MM-DDTHH:MM:SS (hora local)
+    // Si quieres otra hora, cambia solo el "T00:00:00"
+    const target = new Date("2026-07-11T00:00:00");
+
+    function pad2(n){ return String(n).padStart(2,'0'); }
 
     function tick(){
       const now = new Date();
-      let diff = Math.max(0, target - now);
+      let diff = target - now;
 
-      const d = Math.floor(diff / (1000*60*60*24)); diff -= d*(1000*60*60*24);
-      const h = Math.floor(diff / (1000*60*60)); diff -= h*(1000*60*60);
-      const m = Math.floor(diff / (1000*60)); diff -= m*(1000*60);
-      const s = Math.floor(diff / 1000);
+      if (diff <= 0) {
+        document.getElementById('d').textContent = "00";
+        document.getElementById('h').textContent = "00";
+        document.getElementById('m').textContent = "00";
+        document.getElementById('s').textContent = "00";
+        return;
+      }
 
-      document.getElementById('d').textContent = String(d).padStart(2,'0');
-      document.getElementById('h').textContent = String(h).padStart(2,'0');
-      document.getElementById('m').textContent = String(m).padStart(2,'0');
+      const totalSeconds = Math.floor(diff / 1000);
+      const d = Math.floor(totalSeconds / (3600*24));
+      const h = Math.floor((totalSeconds % (3600*24)) / 3600);
+      const m = Math.floor((totalSeconds % 3600) / 60);
+      const s = totalSeconds % 60;
+
+      document.getElementById('d').textContent = pad2(d);
+      document.getElementById('h').textContent = pad2(h);
+      document.getElementById('m').textContent = pad2(m);
+      document.getElementById('s').textContent = pad2(s);
+    }
+
+    tick();
+    setInterval(tick, 1000);
+  </script>
+</body>
+</html>
