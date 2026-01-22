@@ -87,7 +87,7 @@
     .petal.p4{ width:140px; height:140px; opacity:.92; }
     .petal.p5{ width:104px; height:104px; opacity:.90; }
 
-    /* Caída vertical con leve drift a la derecha */
+    /* Caída vertical elegante y lenta */
     @keyframes petalFall{
       0%   { transform: translate3d(var(--x0), -12vh, 0) rotate(0deg); }
       100% { transform: translate3d(var(--x1), 120vh, 0) rotate(520deg); }
@@ -101,28 +101,27 @@
     */
 
     .sealWrap{
-      position:absolute;
-      left:50%;
-      top:68%;
-      transform:translate(-50%,-50%);
-      z-index:3;
-      width:min(340px, 66vw); /* este "wrap" es una referencia visual; NO es el sello grande, solo para posicionar bien */
-      height:0;
-    }
+  position:absolute;
+  left:50%;
+  top:66.8%;                 /* AJUSTA la altura del sello (si quieres luego lo afinamos) */
+  transform:translate(-50%,-50%);
+  z-index:3;
+  width:min(440px, 86vw);    /* Más grande para que el sello quede del tamaño del sello real */
+  aspect-ratio:1/1;
+}
 
-    /* botón sello PEQUEÑO */
-    .sealBtn{
-      position:absolute;
-      left:50%;
-      top:0;
-      transform:translate(-50%, -22%); /* SUBE 22% de su propia altura (20-25%) */
-      width:62%;                       /* 62% del "tamaño de referencia" (60-65%) */
-      aspect-ratio:1/1;
-      border:0;
-      padding:0;
-      background:url('seal.png') center/contain no-repeat;
-      border-radius:999px;
-      cursor:pointer;
+.sealBtn{
+  position:absolute;
+  inset:0;                   /* Ocupa TODO el wrap */
+  width:100%;
+  height:100%;
+  transform:none;            /* Ya no se sube */
+  border:0;
+  padding:0;
+  background:url('seal.png') center/contain no-repeat;
+  border-radius:999px;
+  cursor:pointer;
+}
       -webkit-tap-highlight-color: transparent;
       outline:none;
     }
