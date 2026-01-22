@@ -1,1 +1,518 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Invitación de Boda</title>
 
+  <!-- Tipografías elegantes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0b0b0c;
+      --card:#121214;
+      --text:#f4f1ec;
+      --muted:#cfc9c1;
+      --line:rgba(255,255,255,.14);
+      --accent:#d6c2a6; /* beige elegante */
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background: radial-gradient(1200px 800px at 20% 0%, #151518 0%, var(--bg) 50%, #080809 100%);
+      color:var(--text);
+      font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    }
+    .wrap{max-width:820px;margin:0 auto;padding:18px}
+    .phone{
+      max-width:420px;
+      margin:0 auto;
+      border:1px solid var(--line);
+      border-radius:28px;
+      overflow:hidden;
+      background:rgba(0,0,0,.2);
+      box-shadow:0 24px 70px rgba(0,0,0,.55);
+    }
+    header.hero{
+      min-height:80vh;
+      display:flex;align-items:flex-end;
+      position:relative;
+      background: #000;
+    }
+    header.hero::before{
+      content:"";
+      position:absolute;inset:0;
+      background:
+        linear-gradient(to top, rgba(0,0,0,.78), rgba(0,0,0,.12) 55%, rgba(0,0,0,.20)),
+        url('hero.jpg') center/cover no-repeat;
+      filter:saturate(.92) contrast(1.05);
+    }
+    .hero-inner{
+      position:relative;
+      width:100%;
+      padding:30px 24px 26px;
+      text-align:center;
+    }
+    .names{
+      font-family:"Great Vibes", cursive;
+      font-size:52px;
+      line-height:1;
+      letter-spacing:.5px;
+      text-shadow:0 6px 26px rgba(0,0,0,.45);
+    }
+    .and{font-family:"Playfair Display", serif;font-weight:400;font-size:18px;color:var(--muted);margin-top:6px}
+    .date{
+      margin-top:14px;
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      justify-content:center;
+      padding:10px 14px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(0,0,0,.25);
+      backdrop-filter: blur(10px);
+      font-family:"Playfair Display", serif;
+      letter-spacing:.12em;
+      font-size:12px;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+    .tagline{
+      margin-top:14px;
+      font-family:"Playfair Display", serif;
+      font-size:16px;
+      color:var(--text);
+      opacity:.95;
+    }
+
+    /* Secciones */
+    section{
+      padding:22px 18px;
+      background:linear-gradient(to bottom, rgba(255,255,255,.06), rgba(255,255,255,0));
+      border-top:1px solid var(--line);
+    }
+    .title{
+      font-family:"Playfair Display", serif;
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      font-size:12px;
+      color:var(--muted);
+      margin:0 0 12px;
+      text-align:center;
+    }
+    .card{
+      background:rgba(18,18,20,.82);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:16px;
+    }
+    .center{text-align:center}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      gap:10px;
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.25);
+      color:var(--text);
+      text-decoration:none;
+      font-weight:600;
+    }
+    .btn:active{transform:scale(.99)}
+    .small{font-size:13px;color:var(--muted);line-height:1.5}
+    .big{
+      font-family:"Playfair Display", serif;
+      font-size:18px;
+      line-height:1.55;
+    }
+
+    /* Countdown */
+    .count{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:10px;
+      margin-top:12px;
+    }
+    .count .box{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px 8px;
+      background:rgba(0,0,0,.18);
+      text-align:center;
+    }
+    .count .num{
+      font-family:"Playfair Display", serif;
+      font-size:22px;
+    }
+    .count .lbl{
+      font-size:10px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin-top:4px;
+    }
+
+    /* Schedule */
+    .timeline{margin:8px 0 0; padding:0; list-style:none}
+    .timeline li{
+      display:grid;
+      grid-template-columns:78px 1fr;
+      gap:12px;
+      padding:12px 0;
+      border-top:1px dashed rgba(255,255,255,.14);
+    }
+    .timeline li:first-child{border-top:0}
+    .t-time{
+      font-family:"Playfair Display", serif;
+      color:var(--accent);
+      letter-spacing:.08em;
+      font-size:12px;
+      text-transform:uppercase;
+      text-align:right;
+      padding-top:2px;
+    }
+    .t-what{font-weight:600}
+    .t-note{font-size:13px;color:var(--muted);margin-top:4px;line-height:1.35}
+
+    /* Dress code palette */
+    .palette{display:flex;gap:10px;justify-content:center;margin-top:10px}
+    .dot{width:26px;height:26px;border-radius:999px;border:1px solid var(--line)}
+    .dot.c1{background:#f1ede6}
+    .dot.c2{background:#d7c7b1}
+    .dot.c3{background:#a78f73}
+    .dot.c4{background:#5a4a3c}
+    .dot.c5{background:#111113}
+
+    /* Gallery */
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:12px;
+    }
+    .ph{
+      width:100%;
+      aspect-ratio:1/1;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:#000 center/cover no-repeat;
+    }
+
+    /* FAQ */
+    details{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px 12px;
+      background:rgba(0,0,0,.18);
+      margin-top:10px;
+    }
+    summary{
+      cursor:pointer;
+      font-weight:700;
+      color:var(--text);
+      outline:none;
+    }
+    details p{margin:10px 0 0;color:var(--muted);line-height:1.45}
+
+    /* RSVP */
+    form{display:grid;gap:10px;margin-top:10px}
+    input, textarea, select{
+      width:100%;
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.20);
+      color:var(--text);
+      font:inherit;
+    }
+    textarea{min-height:90px;resize:vertical}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .submit{
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:var(--accent);
+      color:#1b120a;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    /* Overlay música */
+    .overlay{
+      position:fixed; inset:0;
+      display:grid; place-items:center;
+      background:rgba(0,0,0,.72);
+      backdrop-filter: blur(10px);
+      padding:18px;
+      z-index:999;
+    }
+    .overlay .box{
+      width:min(420px, 100%);
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:rgba(18,18,20,.92);
+      padding:18px;
+      text-align:center;
+    }
+    .overlay h2{
+      font-family:"Playfair Display", serif;
+      margin:0 0 8px;
+    }
+    .overlay p{margin:0 0 14px;color:var(--muted);line-height:1.4}
+    .hide{display:none}
+    footer{
+      padding:22px 18px;
+      text-align:center;
+      color:var(--muted);
+      border-top:1px solid var(--line);
+      background:rgba(0,0,0,.12);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Música (sube song.mp3 al repo) -->
+  <audio id="music" loop>
+    <source src="song.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Overlay: para iniciar audio (necesario en celulares) -->
+  <div id="overlay" class="overlay">
+    <div class="box">
+      <h2>Nuestra boda</h2>
+      <p>Para una mejor experiencia, toca el botón y activamos la música.</p>
+      <button id="startBtn" class="submit" type="button">Activar música</button>
+      <p class="small" style="margin-top:10px">Si no quieres música, puedes cerrar esta pantalla.</p>
+      <button id="skipBtn" class="btn" type="button" style="margin-top:10px">Entrar sin música</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="phone">
+
+      <!-- PORTADA -->
+      <header class="hero">
+        <div class="hero-inner">
+          <div class="names">NOMBRE & NOMBRE</div>
+          <div class="and">Nos casamos</div>
+          <div class="date">Sábado · 26 Agosto 2026 · 4:00 PM</div>
+          <div class="tagline">Nos haría muy felices que nos acompañes en este día.</div>
+        </div>
+      </header>
+
+      <!-- CUENTA REGRESIVA -->
+      <section>
+        <div class="title">Cuenta regresiva</div>
+        <div class="card center">
+          <div class="big">Falta poquito para el gran día 🤍</div>
+          <div class="count" id="countdown">
+            <div class="box"><div class="num" id="d">--</div><div class="lbl">Días</div></div>
+            <div class="box"><div class="num" id="h">--</div><div class="lbl">Horas</div></div>
+            <div class="box"><div class="num" id="m">--</div><div class="lbl">Min</div></div>
+            <div class="box"><div class="num" id="s">--</div><div class="lbl">Seg</div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CRONOGRAMA -->
+      <section>
+        <div class="title">Horario</div>
+        <div class="card">
+          <ul class="timeline">
+            <li>
+              <div class="t-time">4:00 PM</div>
+              <div>
+                <div class="t-what">Ceremonia</div>
+                <div class="t-note">Llega 15 minutos antes para ubicarnos con calma.</div>
+              </div>
+            </li>
+            <li>
+              <div class="t-time">5:30 PM</div>
+              <div>
+                <div class="t-what">Sesión de fotos</div>
+                <div class="t-note">Un momentito para guardar recuerdos.</div>
+              </div>
+            </li>
+            <li>
+              <div class="t-time">7:00 PM</div>
+              <div>
+                <div class="t-what">Recepción</div>
+                <div class="t-note">Cena, brindis y a celebrar.</div>
+              </div>
+            </li>
+            <li>
+              <div class="t-time">9:00 PM</div>
+              <div>
+                <div class="t-what">Fiesta</div>
+                <div class="t-note">Baila con nosotros hasta que el cuerpo diga.</div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- UBICACIÓN -->
+      <section>
+        <div class="title">Ubicación</div>
+        <div class="card center">
+          <div class="big">Lugar: <b>Nombre del local</b></div>
+          <p class="small">Dirección: Calle / distrito / ciudad</p>
+          <a class="btn" target="_blank" href="https://maps.google.com/?q=Nombre+del+local">Abrir en Google Maps</a>
+        </div>
+      </section>
+
+      <!-- DRESS CODE -->
+      <section>
+        <div class="title">Dress Code</div>
+        <div class="card center">
+          <div class="big">Elegante / Formal</div>
+          <p class="small">Paleta sugerida (puedes cambiarla):</p>
+          <div class="palette">
+            <div class="dot c1"></div><div class="dot c2"></div><div class="dot c3"></div><div class="dot c4"></div><div class="dot c5"></div>
+          </div>
+          <p class="small" style="margin-top:10px">Blanco reservado para la novia 🤍</p>
+        </div>
+      </section>
+
+      <!-- NUESTRA HISTORIA -->
+      <section>
+        <div class="title">Nuestra historia</div>
+        <div class="card">
+          <div class="ph" style="background-image:url('couple.jpg'); aspect-ratio:16/10;"></div>
+          <p class="small" style="margin-top:12px">
+            Aquí pones un texto cortito y bonito: cómo se conocieron, algo que los represente y una frase final.
+          </p>
+        </div>
+      </section>
+
+      <!-- GALERÍA -->
+      <section>
+        <div class="title">Galería</div>
+        <div class="card">
+          <div class="grid">
+            <div class="ph" style="background-image:url('gallery1.jpg');"></div>
+            <div class="ph" style="background-image:url('gallery2.jpg');"></div>
+          </div>
+          <p class="small" style="margin-top:10px">Si no quieres galería, esta sección se puede borrar.</p>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section>
+        <div class="title">Detalles</div>
+        <div class="card">
+          <details>
+            <summary>¿Los niños están invitados?</summary>
+            <p>Coloca tu respuesta aquí (sí / no / solo familia, etc.).</p>
+          </details>
+          <details>
+            <summary>¿Hay estacionamiento?</summary>
+            <p>Coloca tu respuesta aquí.</p>
+          </details>
+          <details>
+            <summary>¿Puedo llevar acompañante?</summary>
+            <p>Coloca tu respuesta aquí.</p>
+          </details>
+        </div>
+      </section>
+
+      <!-- RSVP (FORMULARIO) -->
+      <section>
+        <div class="title">RSVP</div>
+        <div class="card">
+          <p class="small">Confirma tu asistencia aquí. (Puedes conectarlo a un Google Form o Formspree)</p>
+
+          <!-- OPCIÓN SIMPLE: se abre WhatsApp (cero complicaciones) -->
+          <div class="center" style="margin-top:10px">
+            <a class="btn" target="_blank" href="https://wa.me/51999999999?text=Hola%20confirmo%20mi%20asistencia%20a%20la%20boda%20😊">Confirmar por WhatsApp</a>
+          </div>
+
+          <hr style="border:0;border-top:1px solid var(--line);margin:14px 0">
+
+          <!-- OPCIÓN PRO (gratis): Formspree. Reemplaza TU_ENDPOINT -->
+          <form action="https://formspree.io/f/TU_ENDPOINT" method="POST">
+            <input name="nombre" placeholder="Tu nombre y apellido" required>
+            <select name="asistencia" required>
+              <option value="" disabled selected>¿Asistirás?</option>
+              <option>Sí, asistiré</option>
+              <option>No podré asistir</option>
+              <option>Confirmo después</option>
+            </select>
+            <textarea name="mensaje" placeholder="Comentario (alergias, acompañante, etc.)"></textarea>
+            <button class="submit" type="submit">Enviar RSVP</button>
+          </form>
+
+          <p class="small" style="margin-top:10px">
+            Para Formspree: creas cuenta gratis y te da el endpoint. Si no quieres eso, deja solo el botón de WhatsApp.
+          </p>
+        </div>
+      </section>
+
+      <!-- CIERRE -->
+      <footer>
+        <div class="big" style="font-family:'Great Vibes', cursive; font-size:34px; color:var(--text); margin-bottom:6px;">
+          Gracias
+        </div>
+        <div class="small">Con cariño, NOMBRE & NOMBRE</div>
+      </footer>
+
+    </div>
+  </div>
+
+  <script>
+    // ===== Música (necesita interacción del usuario) =====
+    const overlayEl = document.getElementById('overlay');
+const startBtn = document.getElementById('startBtn');
+const skipBtn = document.getElementById('skipBtn');
+const music = document.getElementById('music');
+const overlayEl = document.getElementById('overlay') || document.querySelector('.overlay');
+const musicEl = document.querySelector('#bgMusic, #music, audio') || window.bgMusic;
+    startBtn.addEventListener('click', async () => {
+  try {
+    if (music && music.play) {
+      await music.play();
+    }
+  } catch (e) {
+    console.log('Audio bloqueado, entrando sin música');
+  }
+  overlayEl.classList.add('hide'); // ENTRA SIEMPRE
+});
+    if (skipBtn) {
+  skipBtn.addEventListener('click', () => overlayEl && overlayEl.classList.add('hide'));
+}
+    // ✅ Botón "Activar música" (forzar que entre sí o sí)
+const playEl =
+  document.querySelector('#playBtn, #playMusic, #btnMusic, .play-btn, button[data-action="play"]') ||
+  [...document.querySelectorAll('button')].find(b => b.textContent.toLowerCase().includes('activar'));
+
+if (playEl) {
+  playEl.addEventListener('click', async () => {
+    try {
+      if (musicEl && musicEl.play) await musicEl.play();
+    } catch (e) {
+      console.log('Audio bloqueado o error:', e);
+    }
+    // entra sí o sí
+    overlayEl.classList.add('hide');
+  });
+}
+    // ===== Countdown (cambia la fecha) =====
+    // Formato: YYYY-MM-DDTHH:MM:SS (hora local aproximada)
+    const target = new Date("2026-08-26T16:00:00");
+
+    function tick(){
+      const now = new Date();
+      let diff = Math.max(0, target - now);
+
+      const d = Math.floor(diff / (1000*60*60*24)); diff -= d*(1000*60*60*24);
+      const h = Math.floor(diff / (1000*60*60)); diff -= h*(1000*60*60);
+      const m = Math.floor(diff / (1000*60)); diff -= m*(1000*60);
+      const s = Math.floor(diff / 1000);
+
+      document.getElementById('d').textContent = String(d).padStart(2,'0');
+      document.getElementById('h').textContent = String(h).padStart(2,'0');
+      document.getElementById('m').textContent = String(m).padStart(2,'0');
