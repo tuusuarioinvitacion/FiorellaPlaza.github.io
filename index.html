@@ -1,1 +1,200 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Invitación</title>
 
+  <!-- Fuentes elegantes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --seal-top: 44%;
+      --seal-size: min(320px, 78vw); /* SÚPER grande */
+      --text-top: 74%;              /* Texto más abajo */
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; margin:0; }
+    body{
+      overflow:hidden;
+      background:#f4f1ed;
+      font-family: "Cormorant Garamond", serif;
+    }
+
+    /* PORTADA */
+    .cover{
+      position:relative;
+      width:100vw;
+      height:100vh;
+      background:url("envelope.jpg") center/cover no-repeat;
+    }
+
+    /* CAPA DE PÉTALOS */
+    .petals{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:4;
+      overflow:hidden;
+    }
+
+    .petal{
+      position:absolute;
+      left: var(--x);
+      top: -25vh;
+      width: var(--size);
+      aspect-ratio: 1 / 1;
+      background: url("petal1.png") center/contain no-repeat;
+      opacity: var(--op);
+      transform: translate3d(0,0,0) rotate(var(--rot));
+      filter: drop-shadow(0 8px 14px rgba(0,0,0,.10));
+      animation:
+        fall var(--dur) linear var(--delay) infinite,
+        sway var(--swayDur) ease-in-out var(--delay) infinite;
+      will-change: transform;
+    }
+
+    @keyframes fall{
+      0%   { transform: translate3d(0,-20vh,0) rotate(var(--rot)); }
+      100% { transform: translate3d(0,135vh,0) rotate(calc(var(--rot) + 360deg)); }
+    }
+    @keyframes sway{
+      0%   { margin-left: 0; }
+      50%  { margin-left: var(--drift); }
+      100% { margin-left: 0; }
+    }
+
+    /* SELLO (BOTÓN) */
+    .seal{
+      position:absolute;
+      left:50%;
+      top: var(--seal-top);
+      width: var(--seal-size);
+      aspect-ratio: 1/1;
+      transform: translate(-50%, -50%);
+      border-radius:999px;
+      background:url("seal.png") center/contain no-repeat;
+      cursor:pointer;
+      z-index:6;
+      border:0;
+      outline:none;
+
+      /* brillo elegante */
+      box-shadow:
+        0 18px 45px rgba(0,0,0,.18),
+        0 0 0 14px rgba(255,255,255,.20),
+        0 0 26px rgba(255,255,255,.35);
+      animation: pulse 2.2s ease-in-out infinite;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    @keyframes pulse{
+      0%,100% { filter: brightness(1); transform: translate(-50%,-50%) scale(1); }
+      50%     { filter: brightness(1.08); transform: translate(-50%,-50%) scale(1.02); }
+    }
+
+    /* TEXTO */
+    .text{
+      position:absolute;
+      left:50%;
+      top: var(--text-top);
+      transform: translate(-50%, -50%);
+      width: min(92vw, 520px);
+      text-align:center;
+      z-index:5;
+      color:#5a4a3f;
+    }
+
+    .text .line1{
+      font-family: "Great Vibes", cursive;
+      font-size: clamp(38px, 7.2vw, 58px);
+      line-height: 1.05;
+      letter-spacing: .3px;
+      text-shadow: 0 6px 18px rgba(0,0,0,.10);
+      margin:0;
+    }
+
+    /* (Opcional) segunda línea fina, si la quieres */
+    .text .line2{
+      margin: 10px 0 0;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(14px, 3.8vw, 18px);
+      letter-spacing: .35em;
+      opacity:.75;
+    }
+
+    /* Seguridad: no mostrar nada tipo “burbuja” */
+    .nohint{ user-select:none; }
+  </style>
+</head>
+
+<body>
+  <div class="cover">
+    <!-- PÉTALOS -->
+    <div class="petals" id="petals"></div>
+
+    <!-- SELLO (clic para abrir) -->
+    <button class="seal nohint" aria-label="Abrir invitación" onclick="openInvitation()"></button>
+
+    <!-- TEXTO -->
+    <div class="text nohint">
+      <p class="line1">Esta invitación es exclusiva para ti</p>
+      <!-- Si NO quieres esta línea, bórrala -->
+      <p class="line2">TOCA EL SELLO</p>
+    </div>
+  </div>
+
+  <script>
+    // ======= PÉTALOS (ABUNDANTES) =======
+    // Se ven como "miles" porque caen constantemente y están repartidos.
+    const petalsWrap = document.getElementById("petals");
+
+    // Ajusta cantidad según potencia: 160 es MUCHO y se ve brutal.
+    // Si tu celular es muy lento, baja a 120.
+    const PETALS_COUNT = 160;
+
+    function rand(min, max){ return Math.random() * (max - min) + min; }
+
+    for(let i=0; i<PETALS_COUNT; i++){
+      const p = document.createElement("span");
+      p.className = "petal";
+
+      // Repartidos por toda la pantalla
+      const x = rand(0, 100).toFixed(2) + "vw";
+
+      // Pétalos GRANDES
+      const size = rand(90, 220).toFixed(0) + "px";  // súper grandes
+
+      // Movimiento elegante
+      const dur = rand(6.5, 13.5).toFixed(2) + "s";
+      const delay = rand(-14, 0).toFixed(2) + "s";   // negativo = ya están cayendo al entrar
+      const rot = rand(0, 360).toFixed(0) + "deg";
+      const drift = rand(10, 80).toFixed(0) + "px";
+      const swayDur = rand(2.6, 5.0).toFixed(2) + "s";
+      const op = rand(0.78, 0.98).toFixed(2);
+
+      p.style.setProperty("--x", x);
+      p.style.setProperty("--size", size);
+      p.style.setProperty("--dur", dur);
+      p.style.setProperty("--delay", delay);
+      p.style.setProperty("--rot", rot);
+      p.style.setProperty("--drift", drift);
+      p.style.setProperty("--swayDur", swayDur);
+      p.style.setProperty("--op", op);
+
+      petalsWrap.appendChild(p);
+    }
+
+    // ======= ABRIR INVITACIÓN =======
+    function openInvitation(){
+      // Cambia el destino si tu siguiente página se llama diferente:
+      // Ej: "invitacion.html" o "home.html"
+      window.location.href = "index.html#open"; // <- cámbialo a tu página real
+    }
+  </script>
+</body>
+</html>
