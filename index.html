@@ -1,74 +1,64 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Invitación</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Invitation</title>
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html,body{ width:100%; height:100%; }
 
-html, body {
-  width: 100%;
-  height: 100%;
-}
+  body{
+    background:#f2f2f2;
+    overflow:hidden;
+  }
 
-body {
-  background-color: #f2f2f2;
-  overflow: hidden;
-}
+  /* CONTAINER */
+  .cover{
+    position:relative;
+    width:100vw;
+    height:100vh;
 
-/* CONTENEDOR */
-.cover {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
+    /* ENVELOPE */
+    background: url("envelope.jpg") center/cover no-repeat;
+  }
 
-  /* SOBRE */
-  background-image: url("envelope.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
+  /* SEAL */
+  .seal{
+    position:absolute;
 
-/* SELLO */
-.seal {
-  position: absolute;
+    /* POSITION (move up/down changing this %) */
+    top: 57%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 
-  /* POSICIÓN EXACTA TIPO REFERENCIA */
-  top: 57%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+    /* SIZE (bigger = increase these) */
+    width: min(420px, 78vw);
+    aspect-ratio: 1 / 1;
 
-  /* TAMAÑO REALISTA */
-  width: 300px;
-  height: 300px;
-  max-width: 80vw;
-  max-height: 80vw;
+    background: url("seal.png") center/contain no-repeat;
+    cursor:pointer;
 
-  background-image: url("seal.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
+    /* REMOVE HALO (circle around seal) */
+    -webkit-mask-image: radial-gradient(circle, #000 0 72%, transparent 78%);
+            mask-image: radial-gradient(circle, #000 0 72%, transparent 78%);
+    -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+            mask-position: center;
+    -webkit-mask-size: 100% 100%;
+            mask-size: 100% 100%;
 
-  border-radius: 50%;
-  cursor: pointer;
-
-  /* SOMBRA REAL */
-  box-shadow: 0 18px 40px rgba(0,0,0,0.28);
-}
+    /* REALISTIC SHADOW */
+    filter: drop-shadow(0 18px 35px rgba(0,0,0,0.28));
+  }
 </style>
 </head>
 
 <body>
-
-<div class="cover">
-  <div class="seal"></div>
-</div>
-
+  <div class="cover">
+    <div class="seal" aria-label="Seal"></div>
+  </div>
 </body>
 </html>
