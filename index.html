@@ -1,65 +1,303 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Invitation</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Invitación</title>
 
-<style>
-  *{ margin:0; padding:0; box-sizing:border-box; }
-  html,body{ width:100%; height:100%; }
+  <style>
+    :root{
+      /* AJUSTES RÁPIDOS */
+      --seal-top: 56%; /* más arriba = baja el número (ej: 54%) */
+      --seal-size: clamp(150px, 34vw, 230px); /* tamaño “medio grande” en celular */
+    }
 
-  body{
-    background:#f2f2f2;
-    overflow:hidden;
-  }
+    *{ box-sizing:border-box; }
+    html, body{
+      margin:0;
+      padding:0;
+      width:100%;
+      height:100%;
+      background:#000;
+      overflow:hidden;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
 
-  /* CONTAINER */
-  .cover{
-    position:relative;
-    width:100vw;
-    height:100vh;
+    /* ===== PORTADA ===== */
+    .cover{
+      position:fixed;
+      inset:0;
+      width:100%;
+      height:100vh;
+      height:100svh; /* Safari */
+      background: url("envelope.jpg") center/cover no-repeat;
+      /* si tu sobre se ve “recortado”, cambia cover por contain:
+         background-size: contain; background-color:#000; */
+    }
 
-    /* ENVELOPE */
-    background: url("envelope.jpg") center/cover no-repeat;
-  }
+    /* PETALOS por encima de todo */
+    .petals{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index: 50;
+      overflow:hidden;
+    }
 
-  /* SEAL */
-  .seal{
-    position:absolute;
+    .petal{
+      position:absolute;
+      top:-35vh;
+      width: 240px;          /* el JS lo sobreescribe con tamaños random */
+      height: 240px;
+      background: url("petal1.png") center/contain no-repeat;
+      opacity: 1;            /* bien visibles */
+      filter: drop-shadow(0 10px 18px rgba(0,0,0,.12));
+      will-change: transform;
+      animation: fall linear infinite;
+    }
 
+    @keyframes fall{
+      from{
+        transform: translate3d(0, -30vh, 0) rotate(0deg);
+      }
+      to{
+        /* caen de arriba hacia abajo, y se van más hacia la derecha */
+        transform: translate3d(var(--dx, 18vw), 130vh, 0) rotate(360deg);
+      }
+    }
+
+    /* SELLO (BOTÓN) */
     .seal{
-  top: 62%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+      position:absolute;
+      left:50%;
+      top: var(--seal-top);
+      transform: translate(-50%, -50%);
+      width: var(--seal-size);
+      height: var(--seal-size);
+      border-radius: 999px;
+      background: url("seal.png") center/contain no-repeat;
+      cursor: pointer;
+      z-index: 60;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-  width: 112vw;      /* GIGANTE en celular */
-  max-width: none;
-  aspect-ratio: 1 / 1;
+    /* brillo elegante alrededor (sin “flotar”) */
+    .seal::before{
+      content:"";
+      position:absolute;
+      inset:-10%;
+      border-radius:999px;
+      background: radial-gradient(circle, rgba(255,255,255,.50) 0%, rgba(255,255,255,.00) 60%);
+      filter: blur(6px);
+      opacity: .55;
+      pointer-events:none;
+      animation: glow 2.6s ease-in-out infinite;
+    }
 
-  background: url("seal.png") center/contain no-repeat;
-  cursor: pointer;
-}
+    .seal::after{
+      content:"";
+      position:absolute;
+      inset:-18%;
+      border-radius:999px;
+      box-shadow:
+        0 0 22px rgba(255,255,255,.35),
+        0 0 55px rgba(255,255,255,.18);
+      opacity:.55;
+      pointer-events:none;
+      animation: glow 2.6s ease-in-out infinite;
+    }
 
-    /* REMOVE HALO (circle around seal) */
-    -webkit-mask-image: radial-gradient(circle, #000 0 72%, transparent 78%);
-            mask-image: radial-gradient(circle, #000 0 72%, transparent 78%);
-    -webkit-mask-repeat: no-repeat;
-            mask-repeat: no-repeat;
-    -webkit-mask-position: center;
-            mask-position: center;
-    -webkit-mask-size: 100% 100%;
-            mask-size: 100% 100%;
+    @keyframes glow{
+      0%,100%{ opacity:.45; transform: scale(1); }
+      50%{ opacity:.80; transform: scale(1.02); }
+    }
 
-    /* REALISTIC SHADOW */
-    filter: drop-shadow(0 18px 35px rgba(0,0,0,0.28));
-  }
-</style>
+    /* ===== INVITACIÓN (SEGUNDA PANTALLA) ===== */
+    .invitation{
+      position:fixed;
+      inset:0;
+      width:100%;
+      height:100vh;
+      height:100svh;
+      background: url("hero.jpg") center/cover no-repeat;
+      display:none;
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 22px;
+      color:#fff;
+    }
+
+    .invitation .card{
+      max-width: 920px;
+      margin: 0 auto;
+      background: rgba(0,0,0,.35);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .title{
+      font-size: 26px;
+      font-weight: 700;
+      margin: 0 0 10px 0;
+      letter-spacing: .2px;
+    }
+
+    .couple{
+      width:100%;
+      border-radius: 14px;
+      display:block;
+      margin: 12px 0 14px 0;
+      border: 1px solid rgba(255,255,255,.18);
+    }
+
+    .gallery{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .gallery img{
+      width:100%;
+      border-radius: 12px;
+      display:block;
+      border: 1px solid rgba(255,255,255,.16);
+    }
+
+    .audioRow{
+      margin-top: 14px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    button{
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 0;
+      cursor:pointer;
+      font-weight: 700;
+    }
+    .btn{
+      background:#fff;
+      color:#000;
+    }
+    .btnGhost{
+      background: rgba(255,255,255,.14);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.22);
+    }
+  </style>
 </head>
 
 <body>
-  <div class="cover">
-    <div class="seal" aria-label="Seal"></div>
+  <!-- PORTADA -->
+  <div class="cover" id="cover">
+    <div class="petals" id="petals"></div>
+    <!-- SELLO (clic) -->
+    <div class="seal" id="seal" aria-label="Abrir invitación"></div>
   </div>
+
+  <!-- INVITACIÓN -->
+  <div class="invitation" id="invitation">
+    <div class="card">
+      <h1 class="title">Nuestra invitación</h1>
+
+      <img class="couple" src="couple.jpg" alt="Foto" />
+
+      <div class="gallery">
+        <img src="gallery1.jpg" alt="Galería 1">
+        <img src="gallery2.jpg" alt="Galería 2">
+        <img src="gallery3.jpg" alt="Galería 3">
+        <img src="gallery4.jpg" alt="Galería 4">
+      </div>
+
+      <div class="audioRow">
+        <button class="btn" id="play">▶ Reproducir música</button>
+        <button class="btnGhost" id="back">↩ Volver a portada</button>
+      </div>
+
+      <audio id="song" src="song.mp3" preload="auto"></audio>
+    </div>
+  </div>
+
+  <script>
+    /* ===== PETALOS GRANDES Y ABUNDANTES ===== */
+    const petalsWrap = document.getElementById("petals");
+
+    function rand(min, max){ return Math.random() * (max - min) + min; }
+
+    function createPetals(){
+      petalsWrap.innerHTML = "";
+
+      const PETAL_COUNT = 60; // abundantes
+      for(let i=0;i<PETAL_COUNT;i++){
+        const p = document.createElement("div");
+        p.className = "petal";
+
+        // posición horizontal al azar
+        const left = rand(-10, 110);
+        p.style.left = left + "vw";
+
+        // tamaños MUY grandes (ajusta si quieres más aún)
+        const size = rand(190, 360);
+        p.style.width = size + "px";
+        p.style.height = size + "px";
+
+        // duración y delay para que no caigan igual
+        const dur = rand(7.5, 13.5);
+        const delay = rand(-12, 0); // empieza “ya” con variedad
+        p.style.animationDuration = dur + "s";
+        p.style.animationDelay = delay + "s";
+
+        // que se desplacen hacia la derecha (como pediste)
+        const dx = rand(10, 28).toFixed(1) + "vw";
+        p.style.setProperty("--dx", dx);
+
+        // un poquito de rotación inicial
+        p.style.transform = `rotate(${rand(0,360)}deg)`;
+
+        petalsWrap.appendChild(p);
+      }
+    }
+
+    createPetals();
+
+    // Re-crear al rotar pantalla
+    window.addEventListener("resize", () => {
+      clearTimeout(window.__petalTimer);
+      window.__petalTimer = setTimeout(createPetals, 180);
+    });
+
+    /* ===== ABRIR INVITACIÓN ===== */
+    const cover = document.getElementById("cover");
+    const invitation = document.getElementById("invitation");
+    const seal = document.getElementById("seal");
+
+    seal.addEventListener("click", () => {
+      cover.style.display = "none";
+      invitation.style.display = "block";
+      // intenta reproducir (en iPhone a veces solo con botón)
+      const song = document.getElementById("song");
+      song.play().catch(()=>{});
+      window.scrollTo(0,0);
+    });
+
+    // botones
+    const playBtn = document.getElementById("play");
+    const backBtn = document.getElementById("back");
+    const song = document.getElementById("song");
+
+    playBtn.addEventListener("click", () => {
+      song.play().catch(()=>{});
+    });
+
+    backBtn.addEventListener("click", () => {
+      song.pause();
+      song.currentTime = 0;
+      invitation.style.display = "none";
+      cover.style.display = "block";
+    });
+  </script>
 </body>
 </html>
