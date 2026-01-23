@@ -28,17 +28,18 @@
   .seal{
     position:absolute;
 
-    /* POSITION (move up/down changing this %) */
-    top: 64%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    .seal{
+  top: 62%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 
-    /* SIZE (bigger = increase these) */
-    width: min(780px, 98vw);
-    aspect-ratio: 1 / 1;
+  width: 112vw;      /* GIGANTE en celular */
+  max-width: none;
+  aspect-ratio: 1 / 1;
 
-    background: url("seal.png") center/contain no-repeat;
-    cursor:pointer;
+  background: url("seal.png") center/contain no-repeat;
+  cursor: pointer;
+}
 
     /* REMOVE HALO (circle around seal) */
     -webkit-mask-image: radial-gradient(circle, #000 0 72%, transparent 78%);
