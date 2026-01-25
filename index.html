@@ -1,1 +1,302 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Invitación</title>
 
+  <style>
+    :root{
+      /* ===== AJUSTES (SOLO CELULAR) ===== */
+      --seal-top: 61.5%;                       /* MÁS ABAJO = sube este número (62% / 63%) */
+      --seal-size: clamp(190px, 46vw, 290px);  /* MÁS GRANDE = sube 46vw a 50vw o 55vw */
+
+      --petal-count: 26;        /* menos pétalos, elegante */
+      --petal-min: 70;          /* tamaño mínimo (px) */
+      --petal-max: 160;         /* tamaño máximo (px) */
+      --petal-speed-min: 16;    /* caída lenta (segundos) */
+      --petal-speed-max: 28;    /* caída lenta (segundos) */
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{
+      margin:0;
+      padding:0;
+      width:100%;
+      height:100%;
+      overflow:hidden;
+      background:#000;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    /* ===== PORTADA ===== */
+    .cover{
+      position:fixed;
+      inset:0;
+      width:100%;
+      height:100vh;
+      height:100svh; /* iOS Safari */
+      background: url("envelope.jpg") center/cover no-repeat;
+    }
+
+    /* ===== PÉTALOS ===== */
+    .petals{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index: 20;
+      overflow:hidden;
+    }
+
+    .petal{
+      position:absolute;
+      top:-25vh;
+      width:120px;
+      height:120px;
+      background: url("petal1.png") center/contain no-repeat;
+      opacity: .95;
+      filter: drop-shadow(0 8px 14px rgba(0,0,0,.12));
+      will-change: transform;
+      animation: fall var(--dur) linear infinite;
+    }
+
+    /* caída suave + deriva tipo aire */
+    @keyframes fall{
+      0%{
+        transform: translate3d(0, -25vh, 0) rotate(0deg);
+      }
+      25%{
+        transform: translate3d(calc(var(--drift) * 0.35), 15vh, 0) rotate(110deg);
+      }
+      50%{
+        transform: translate3d(calc(var(--drift) * 0.65), 55vh, 0) rotate(220deg);
+      }
+      75%{
+        transform: translate3d(calc(var(--drift) * 0.85), 95vh, 0) rotate(310deg);
+      }
+      100%{
+        transform: translate3d(var(--drift), 135vh, 0) rotate(420deg);
+      }
+    }
+
+    /* ===== SELLO (BOTÓN) ===== */
+    .seal{
+      position:absolute;
+      left:50%;
+      top: var(--seal-top);
+      transform: translate(-50%, -50%);
+      width: var(--seal-size);
+      height: var(--seal-size);
+      border-radius: 999px;
+      background: url("seal.png") center/contain no-repeat;
+      cursor:pointer;
+      z-index: 40; /* encima de pétalos */
+      -webkit-tap-highlight-color: transparent;
+
+      /* sombra REAL sin “halo circular gigante” */
+      box-shadow: 0 10px 22px rgba(0,0,0,.22);
+    }
+
+    /* ===== INVITACIÓN (SEGUNDA PANTALLA) ===== */
+    .invitation{
+      position:fixed;
+      inset:0;
+      width:100%;
+      height:100vh;
+      height:100svh;
+      background: url("hero.jpg") center/cover no-repeat;
+      display:none;
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 22px;
+      color:#fff;
+    }
+
+    .invitation .card{
+      max-width: 920px;
+      margin: 0 auto;
+      background: rgba(0,0,0,.35);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .title{
+      font-size: 26px;
+      font-weight: 700;
+      margin: 0 0 10px 0;
+      letter-spacing: .2px;
+    }
+
+    .couple{
+      width:100%;
+      border-radius: 14px;
+      display:block;
+      margin: 12px 0 14px 0;
+      border: 1px solid rgba(255,255,255,.18);
+    }
+
+    .gallery{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .gallery img{
+      width:100%;
+      border-radius: 12px;
+      display:block;
+      border: 1px solid rgba(255,255,255,.16);
+    }
+
+    .audioRow{
+      margin-top: 14px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    button{
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 0;
+      cursor:pointer;
+      font-weight: 700;
+    }
+    .btn{
+      background:#fff;
+      color:#000;
+    }
+    .btnGhost{
+      background: rgba(255,255,255,.14);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.22);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- PORTADA -->
+  <div class="cover" id="cover">
+    <div class="petals" id="petals"></div>
+    <div class="seal" id="seal" aria-label="Abrir invitación"></div>
+  </div>
+
+  <!-- INVITACIÓN -->
+  <div class="invitation" id="invitation">
+    <div class="card">
+      <h1 class="title">Nuestra invitación</h1>
+
+      <img class="couple" src="couple.jpg" alt="Foto" />
+
+      <div class="gallery">
+        <img src="gallery1.jpg" alt="Galería 1">
+        <img src="gallery2.jpg" alt="Galería 2">
+        <img src="gallery3.jpg" alt="Galería 3">
+        <img src="gallery4.jpg" alt="Galería 4">
+      </div>
+
+      <div class="audioRow">
+        <button class="btn" id="play">▶ Reproducir música</button>
+        <button class="btnGhost" id="back">↩ Volver a portada</button>
+      </div>
+
+      <audio id="song" src="song.mp3" preload="auto"></audio>
+    </div>
+  </div>
+
+  <script>
+    /* ===== PÉTALOS (ELEGANTES, LENTOS, MENOS) ===== */
+    const petalsWrap = document.getElementById("petals");
+
+    function rand(min, max){ return Math.random() * (max - min) + min; }
+
+    function getVarNumber(name, fallback){
+      const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+      const n = parseFloat(v);
+      return Number.isFinite(n) ? n : fallback;
+    }
+
+    function createPetals(){
+      petalsWrap.innerHTML = "";
+
+      const COUNT = getVarNumber("--petal-count", 26);
+      const MIN  = getVarNumber("--petal-min", 70);
+      const MAX  = getVarNumber("--petal-max", 160);
+      const SPMN = getVarNumber("--petal-speed-min", 16);
+      const SPMX = getVarNumber("--petal-speed-max", 28);
+
+      for(let i=0;i<COUNT;i++){
+        const p = document.createElement("div");
+        p.className = "petal";
+
+        // posición horizontal
+        p.style.left = rand(-8, 108) + "vw";
+
+        // tamaño
+        const size = rand(MIN, MAX);
+        p.style.width = size + "px";
+        p.style.height = size + "px";
+
+        // velocidad (lento)
+        const dur = rand(SPMN, SPMX);
+        p.style.setProperty("--dur", dur + "s");
+
+        // delay para que ya esté animado al cargar
+        p.style.animationDelay = rand(-dur, 0) + "s";
+
+        // deriva tipo aire (izquierda/derecha suave)
+        const drift = rand(-18, 18).toFixed(1) + "vw";
+        p.style.setProperty("--drift", drift);
+
+        // opacidad variada elegante
+        p.style.opacity = rand(0.55, 0.95).toFixed(2);
+
+        petalsWrap.appendChild(p);
+      }
+    }
+
+    createPetals();
+
+    // recrear al rotar/resize (sin lag)
+    window.addEventListener("resize", () => {
+      clearTimeout(window.__petalTimer);
+      window.__petalTimer = setTimeout(createPetals, 150);
+    });
+
+    /* ===== ABRIR INVITACIÓN ===== */
+    const cover = document.getElementById("cover");
+    const invitation = document.getElementById("invitation");
+    const seal = document.getElementById("seal");
+
+    function openInvite(){
+      cover.style.display = "none";
+      invitation.style.display = "block";
+      window.scrollTo(0,0);
+      const song = document.getElementById("song");
+      song.play().catch(()=>{});
+    }
+
+    // iPhone: mejor touch + click
+    seal.addEventListener("touchstart", (e) => { e.preventDefault(); openInvite(); }, {passive:false});
+    seal.addEventListener("click", openInvite);
+
+    const playBtn = document.getElementById("play");
+    const backBtn = document.getElementById("back");
+    const song = document.getElementById("song");
+
+    playBtn.addEventListener("click", () => {
+      song.play().catch(()=>{});
+    });
+
+    backBtn.addEventListener("click", () => {
+      song.pause();
+      song.currentTime = 0;
+      invitation.style.display = "none";
+      cover.style.display = "block";
+    });
+  </script>
+</body>
+</html>
