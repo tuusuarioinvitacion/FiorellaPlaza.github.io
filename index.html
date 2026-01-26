@@ -8,8 +8,8 @@
   <style>
     :root{
       /* ===== AJUSTES (SOLO CELULAR) ===== */
-      --seal-top: 61.5%;                       /* MÁS ABAJO = sube este número (62% / 63%) */
-      --seal-size: clamp(190px, 46vw, 290px);  /* MÁS GRANDE = sube 46vw a 50vw o 55vw */
+      --seal-top: 62.5%;                       /* MÁS ABAJO = sube este número (62% / 63%) */
+      --seal-size: clamp(250px, 64vw,380px);  /* MÁS GRANDE = sube 46vw a 50vw o 55vw */
 
       --petal-count: 26;        /* menos pétalos, elegante */
       --petal-min: 70;          /* tamaño mínimo (px) */
@@ -82,17 +82,26 @@
 
     /* ===== SELLO (BOTÓN) ===== */
     .seal{
-      position:absolute;
-      left:50%;
-      top: var(--seal-top);
-      transform: translate(-50%, -50%);
-      width: var(--seal-size);
-      height: var(--seal-size);
-      border-radius: 999px;
-      background: url("seal.png") center/contain no-repeat;
-      cursor:pointer;
-      z-index: 40; /* encima de pétalos */
-      -webkit-tap-highlight-color: transparent;
+      .seal{
+  position:absolute;
+  left:50%;
+  top: var(--seal-top);
+  transform: translate(-50%, -50%);
+  width: var(--seal-size);
+  height: var(--seal-size);
+
+  background: url("seal.png") center/contain no-repeat;
+  cursor:pointer;
+  z-index: 40;
+  -webkit-tap-highlight-color: transparent;
+
+  /* sombra real */
+  filter: drop-shadow(0 10px 22px rgba(0,0,0,.22));
+
+  /* RECORTE para eliminar el círculo claro del PNG */
+  -webkit-mask-image: radial-gradient(circle, #000 58%, transparent 60%);
+  mask-image: radial-gradient(circle, #000 58%, transparent 60%);
+}
 
       /* sombra REAL sin “halo circular gigante” */
       box-shadow: 0 10px 22px rgba(0,0,0,.22);
